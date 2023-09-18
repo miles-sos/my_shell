@@ -1,0 +1,3 @@
+#!/bin/bash
+
+gcc *.c -o hsh && clear && valgrind ./hsh
