@@ -31,12 +31,13 @@ int main(int argc, char **argv, char **env)
 
 		exit_shell(toks_arr, buffer, cpy_buffer, tokens, num_toks); /*exit*/
 
-		if (strcmp(toks_arr[0], "cd") == 0) /*cd command*/
+		if (_strcmp(toks_arr[0], "cd") == 0) /*cd command*/
 		{
 			change_dir(toks_arr, env);
 			free_all(cpy_buffer, tokens, toks_arr, num_toks);
 			continue;
 		}
+
 		flag = process_input(toks_arr[0], toks_arr, env, argv);
 		free_all(cpy_buffer, tokens, toks_arr, num_toks);
 		if (flag == 1)

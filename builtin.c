@@ -13,7 +13,7 @@ void exit_shell(char **toks, char *bu, char *cp, char **toks_m, int nt)
 {
 	int exit_status = 0;
 
-	if (strcmp(toks[0], "exit") == 0)
+	if (_strcmp(toks[0], "exit") == 0)
 	{
 		if (toks[1]) /*exit with argument passed*/
 		{
@@ -39,16 +39,81 @@ void exit_shell(char **toks, char *bu, char *cp, char **toks_m, int nt)
  */
 void change_dir(char **toks, char **env)
 {
-	char *home = "HOME=", *path = NULL;
+	char *var = NULL, *path = NULL;
+	int i = 0;
 
-	if (toks[1] == NULL) /*move to home dir*/
+	if (toks[1] == NULL || _strcmp(toks[1], "") == 0)
 	{
-		path = get_env_var(env, home, strlen(home));
-		path = strstr(path, home);
-		path += strlen(home);
+		var = "HOME=";
+		path = get_env_var(env, var, _strlen(var));
+		path = _strstr(path, var);
+		path += _strlen(var);
 		if (path)
 			chdir(path);
 	}
-	else
-		chdir(toks[1]);
+	else if (_strcmp(toks[1], "-") == 0)
+	{
+		var = "OLDPWD=";
+		path = get_env_var(env, var, _strlen(var));
+		path = _strstr(path, var);
+		path += _strlen(var);
+		if (path)
+			chdir(path);
+	}
+	else if (chdir(toks[1]) == -1)
+	{
+		perror("unknown");
+	}
+}
+
+/**
+ * _setenv - sets/updates an environment variable
+ * @var: variable name
+ * @value: value to be set
+ * @overwrite: choose to update or NOT
+ * @env: environment variable collection
+ * Return: 0 if successful, -1 on failure
+ */
+int _setenv(char *var, char *value, int overwrite, char **env)
+{
+	char *_var_exist = NULL, *env_var = NULL;
+
+	if (var == NULL || value == NULL || strchr(var, '=') != NULL)
+	{
+		return (-1);
+	}
+	_var_exist = get_env_var(env, var, _strlen(var));
+	if (_var_exist != NULL) /*EXISTS*/
+	{
+		if (overwrite)
+		{
+			env_var  = malloc(_strlen(var) + _strlen(value) + 2);
+			if (env_var == NULL)
+				return (-1);
+
+			_strcpy(env_var, var);
+			_strcat(env_var, "=");
+			_strcat(env_var, value);
+
+			/*env_var[_strlen(env_var)] = '\0';*/
+			putenv(env_var);
+			free(env_var);
+		}
+		else
+			return (0);
+	}
+	else /*NOT EXIST*/
+	{
+		env_var = malloc(_strlen(var) + _strlen(value) + 2);
+		if (env_var == NULL)
+			return (-1);
+
+		_strcpy(env_var, var);
+		_strcat(env_var, "=");
+		_strcat(env_var, value);
+		if (putenv(env_var) != 0)
+			return (-1);
+		free(env_var);
+	}
+	return (0);
 }

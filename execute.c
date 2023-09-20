@@ -59,7 +59,7 @@ char *get_env_var(char **env, char *var, int var_len)
 
 	while (env[i])
 	{
-		if (strncmp(env[i], var, strlen(var)) == 0)
+		if (_strncmp(env[i], var, _strlen(var)) == 0)
 		{
 			return (env[i]);
 		}
@@ -82,12 +82,12 @@ char *tok_path(char *path, char *command)
 	char *copy_path = NULL;
 	size_t file_path_len;
 
-	copy_path = strdup(path);
+	copy_path = _strdup(path);
 
-	pathtok = strtok(copy_path, delim);
+	pathtok = _strtok(copy_path, delim);
 	while (pathtok)
 	{
-		file_path_len = strlen(pathtok) + 1 + strlen(command) + 1;
+		file_path_len = _strlen(pathtok) + 1 + _strlen(command) + 1;
 		file_path = malloc(file_path_len);
 		if (!file_path)
 		{
@@ -95,9 +95,9 @@ char *tok_path(char *path, char *command)
 			free(copy_path);
 			return (NULL);
 		}
-		strcpy(file_path, pathtok);
-		strcat(file_path, "/");
-		strcat(file_path, command);
+		_strcpy(file_path, pathtok);
+		_strcat(file_path, "/");
+		_strcat(file_path, command);
 
 		if (access(file_path, X_OK) == 0)
 		{
@@ -106,7 +106,7 @@ char *tok_path(char *path, char *command)
 		}
 
 		free(file_path);
-		pathtok = strtok(NULL, delim);
+		pathtok = _strtok(NULL, delim);
 	}
 	free(copy_path);
 	return (NULL);

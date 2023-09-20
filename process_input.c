@@ -63,7 +63,7 @@ char *get_pg_name(char **av)
 	char *error = NULL;
 	int program_name_len = 0;
 
-	program_name_len = strlen(av[0]);
+	program_name_len = _strlen(av[0]);
 
 	error = malloc(sizeof(char) * program_name_len + 1);
 	if (!error)
@@ -71,6 +71,6 @@ char *get_pg_name(char **av)
 		perror("Failed memory allocation");
 		return (NULL);
 	}
-	strcpy(error, av[0]);
+	_strcpy(error, av[0]);
 	return (error);
 }

@@ -23,7 +23,6 @@ ssize_t _getline(char **_get, size_t *nget, FILE *input)
 			return (-1);
 		}
 	}
-
 	_getcpy = *_get;
 
 	while ((ch = _getc(input)) != EOF)
@@ -40,12 +39,14 @@ ssize_t _getline(char **_get, size_t *nget, FILE *input)
 			_getcpy = updategetcpy;
 			*_get = _getcpy; /*Update the original _get*/
 		}
-
 		_getcpy[i++] = (char)ch; /*type casting*/
 		if (ch == '\n')
 			break;
 	}
-	return (i);
+	if (i < 1)
+		return (-1);
+	else
+		return (i);
 }
 
 
